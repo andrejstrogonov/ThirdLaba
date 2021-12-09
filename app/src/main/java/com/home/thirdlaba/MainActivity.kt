@@ -1,6 +1,8 @@
 package com.home.thirdlaba
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,16 +12,19 @@ import com.home.thirdlaba.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainViewModel
+
     private val adapter=UsersAdapter()
-    lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val retrofitService=RetrofitService.getInstance()
         val mainRepository=MainRepository(retrofitService)
-        binding.recyclerview.adapter=adapter
+
 
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
 
@@ -40,5 +45,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
         viewModel.getAllUsers()
+    }
+
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        binding.recyclerview.adapter=adapter
+        return binding.root
     }
 }
